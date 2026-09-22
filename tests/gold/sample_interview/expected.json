@@ -1,0 +1,155 @@
+{
+  "session_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "source_file": "input.txt",
+  "created_at": "2026-05-23T12:00:00",
+  "speaker_map": {
+    "ALEX_RIVERA": "Alex Rivera",
+    "MORGAN_CHEN": "Morgan Chen"
+  },
+  "segments": [
+    {
+      "id": "5fe2e0ee-ba92-5ab1-a9b6-6ea5b2795c67",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "Thank you for joining me today. Can you give our listeners a brief overview of your work?",
+      "confidence": 0.96,
+      "flags": []
+    },
+    {
+      "id": "ff6f0c18-ee55-572c-a44e-9ff9e2f50757",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "Of course. I've spent the last eight years studying long-term climate datasets, looking for patterns that standard models tend to miss.",
+      "confidence": 0.91,
+      "flags": []
+    },
+    {
+      "id": "ff8c49b9-f332-5767-a673-52698b81027f",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "That sounds like painstaking work. Um, what drew you to this particular corner of climate science?",
+      "confidence": 0.94,
+      "flags": ["filler_word"]
+    },
+    {
+      "id": "8870736b-08e7-54b5-b650-2d2c5baadab9",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "Honestly, it was a single dataset from the 1980s. The anomalies were so striking that it changed my entire research focus.",
+      "confidence": 0.89,
+      "flags": []
+    },
+    {
+      "id": "6e45e3e1-443e-5001-95c3-ef76b877a5db",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "So the data itself pulled you in?",
+      "confidence": 0.97,
+      "flags": []
+    },
+    {
+      "id": "af0cbcbc-386c-5173-ab53-adf7e89aebe4",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "Exactly. And the more I looked, the more I found.",
+      "confidence": 0.98,
+      "flags": []
+    },
+    {
+      "id": "485b692e-4754-5fa8-ba91-2abe740b96ff",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "I — I want to ask about the policy implications, because I know that's something you feel strongly about.",
+      "confidence": 0.57,
+      "flags": ["false_start"]
+    },
+    {
+      "id": "42c54e22-3f3a-549e-83b6-2716cde12dad",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "Your findings have been cited in several major reports. Uh, how does it feel to see your work having that kind of reach?",
+      "confidence": 0.93,
+      "flags": ["filler_word"]
+    },
+    {
+      "id": "cf3a135d-d34b-5961-b80e-079e6fb6eeb2",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "It's humbling, really. Though I sometimes worry that the nuances get lost in translation.",
+      "confidence": 0.95,
+      "flags": []
+    },
+    {
+      "id": "c14d603d-61c4-5508-967c-5d27f11462b6",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "The raw numbers are compelling, but context matters enormously. A single data point can be misread very easily.",
+      "confidence": 0.96,
+      "flags": []
+    },
+    {
+      "id": "d2baf8b0-b904-5d1e-bcdf-0302f5d07b3f",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "ALEX_RIVERA",
+        "resolved_name": "Alex Rivera"
+      },
+      "text": "That's a fair concern. What would you say to researchers who are just starting out in this field?",
+      "confidence": 0.92,
+      "flags": []
+    },
+    {
+      "id": "3a7e872b-0289-5844-96e2-27b0fc0d724e",
+      "start_time": 0.0,
+      "end_time": 0.0,
+      "speaker": {
+        "anonymous_id": "MORGAN_CHEN",
+        "resolved_name": "Morgan Chen"
+      },
+      "text": "Be patient. The data will tell you what it wants to tell you — you just have to learn to listen.",
+      "confidence": 0.98,
+      "flags": []
+    }
+  ]
+}

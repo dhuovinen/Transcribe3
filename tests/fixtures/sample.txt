@@ -1,0 +1,11 @@
+JANE SMITH: Welcome to the interview. Can you tell us a bit about yourself?
+
+JOHN DOE: Sure, happy to. I've been working in software engineering for about ten years.
+
+JANE SMITH: That's impressive. What projects are you most proud of?
+
+JOHN DOE: I led the migration of our monolith to a microservices architecture. It was challenging but very rewarding.
+
+JANE SMITH: How did the team handle the transition? Were there any major obstacles?
+
+JOHN DOE: Communication was the biggest challenge. We had to establish new conventions and documentation practices from scratch.

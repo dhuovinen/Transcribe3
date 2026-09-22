@@ -1,0 +1,23 @@
+1
+00:00:01,000 --> 00:00:04,500
+Jane Smith: Welcome to the interview. Can you tell us a bit about yourself?
+
+2
+00:00:05,200 --> 00:00:10,800
+John Doe: Sure, happy to. I've been working in software engineering for about ten years.
+
+3
+00:00:11,300 --> 00:00:16,000
+Jane Smith: That's impressive. What projects are you most proud of?
+
+4
+00:00:16,800 --> 00:00:23,500
+John Doe: I led the migration of our monolith to a microservices architecture. It was challenging but very rewarding.
+
+5
+00:00:24,100 --> 00:00:29,000
+Jane Smith: How did the team handle the transition? Were there any major obstacles?
+
+6
+00:00:29,700 --> 00:00:36,200
+John Doe: Communication was the biggest challenge. We had to establish new conventions and documentation practices from scratch.

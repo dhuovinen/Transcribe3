@@ -1,0 +1,27 @@
+INTERVIEWER: Thanks for making the time today. Can you start by telling me a bit about your background?
+
+GUEST: Of course. Um, I've been in the field for about twelve years now. Started out in, uh, data infrastructure and kind of moved my way into the research side over time.
+
+INTERVIEWER: And what prompted that shift?
+
+GUEST: Honestly it was — it was a project that kind of changed my perspective. We were building out a pipeline for a large financial client and I realised the most interesting problems weren't in the plumbing, they were in what the data was actually saying.
+
+INTERVIEWER: That makes sense. So when you made the transition, what was the steepest learning curve?
+
+GUEST: The communication side, without question. You know, on the infrastructure side you ship something and it either works or it doesn't. Research is much more, uh, ambiguous. You have to get comfortable presenting findings that are directional rather than definitive.
+
+INTERVIEWER: How did you get comfortable with that ambiguity?
+
+GUEST: Slowly. I — I had a mentor who was really good at framing uncertainty in a way that stakeholders could actually work with. That was probably the single most valuable thing I picked up early on.
+
+INTERVIEWER: What advice would you give to someone making a similar transition today?
+
+GUEST: Find the people who are good at the thing you want to get good at and just, you know, watch how they work. And be patient with yourself. The technical skills transfer faster than you think. The judgment takes longer.
+
+INTERVIEWER: Last question — what are you most excited about in the field right now?
+
+GUEST: The tooling, honestly. The gap between having an idea and being able to test it has collapsed dramatically in the last three years. Things that used to take a team of five and a quarter of runway you can now prototype in a weekend. That changes what's worth trying.
+
+INTERVIEWER: That's a great note to end on. Thanks so much.
+
+GUEST: My pleasure. Thanks for having me.

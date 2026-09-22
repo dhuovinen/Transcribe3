@@ -1,0 +1,225 @@
+{
+  "case": "retro_5min",
+  "source": "synthetic-tts",
+  "notes": "Generated via macOS say from a fixed two-speaker script; script text is exact ground truth by construction.",
+  "audio_file": "audio.wav",
+  "duration_sec": 306.1,
+  "segments": [
+    {
+      "speaker": "Alex",
+      "text": "Okay, thanks everyone for joining. Let's do a quick retro on the September release."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Sounds good. I'll start with what went well, if that's okay."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Please, go ahead."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "So the migration to the new billing service went smoother than expected. We budgeted three days and it took two."
+    },
+    {
+      "speaker": "Alex",
+      "text": "That's great. Was that because of the staging environment we set up last month?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Exactly. Having a realistic staging environment with production-like data caught two edge cases before they hit customers."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Good, that validates the investment. What about the on call rotation? I heard there were some pages overnight."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Yeah, there were four pages between Tuesday and Thursday. Three were false alarms from a noisy health check."
+    },
+    {
+      "speaker": "Alex",
+      "text": "And the fourth?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "The fourth was real. The payment webhook retried too aggressively and briefly overloaded the database connection pool."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Do we have a fix for that already, or is it still open?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "We shipped a fix on Friday. We added exponential backoff and capped retries at five attempts."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Perfect. Let's make sure that's documented in the runbook so the next on call engineer isn't caught off guard."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Agreed, I'll update the runbook this afternoon."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Let's talk about the frontend rollout next. How did the feature flag rollout go?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "We rolled out to five percent, then twenty five percent, then everyone, over about four days."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Any issues at each stage?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "At the twenty five percent stage we saw a small increase in checkout abandonment, maybe half a percent."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Did we figure out why?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "It turned out to be a rendering delay on older Android devices. The new checkout summary component was doing a synchronous layout calculation."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Was that fixed before we went to a hundred percent?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Yes, we moved the calculation off the main thread and abandonment went back to baseline within a day."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Nice catch. What about the design team's feedback on the new checkout flow?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Overall positive. They want to revisit the confirmation screen typography in the next design review."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Let's put that on the agenda for next week rather than block this release on it."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Agreed, it's a small polish item, not a blocker."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Okay, now for what didn't go well. I want to talk about the deployment pipeline delays."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Right, the pipeline took almost forty minutes on release day, compared to our usual fifteen."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Do we know the root cause?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "The test suite for the reporting module isn't parallelized, and it grew significantly this quarter."
+    },
+    {
+      "speaker": "Alex",
+      "text": "How many tests are we talking about?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "About twelve hundred tests now, up from around four hundred at the start of the year."
+    },
+    {
+      "speaker": "Alex",
+      "text": "That's a big jump. Should we split that suite out, or invest in parallelization?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "I'd recommend parallelization first since it's lower effort. Splitting can come later if needed."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Let's put together a small proposal by next Friday and estimate the effort."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "I can own that. I'll have a short write up ready by Wednesday for early feedback."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Great, thank you. Any other blockers or risks we should flag before we wrap up?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "One thing. The vendor for the fraud detection API mentioned a rate limit change starting next month."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Do we know the new limit yet?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Not the exact number, but they said it could be as much as forty percent lower than today."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Let's get that confirmed this week so we have time to adjust our request batching if needed."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "I'll email them today and loop in the team once I hear back."
+    },
+    {
+      "speaker": "Alex",
+      "text": "One more thing before we wrap. How's the team feeling about the on call load in general?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Honestly, a bit better than last quarter. Splitting the rotation into two weeks instead of one helped a lot."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Good, I was worried burnout might creep back in after the holidays."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "It's manageable right now. The main ask from the team was better documentation for the newer services."
+    },
+    {
+      "speaker": "Alex",
+      "text": "That's fair. Let's fold that into the runbook update you're already doing."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "I can do that. I'll flag which services are missing docs and prioritize those first."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Great. Last item, budget for next quarter. Do we need to request more infrastructure spend?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Slightly. The staging environment upgrade added about eight percent to our monthly cloud bill."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Is that within the range we planned for?"
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Yes, it's under the ten percent ceiling we agreed on back in July."
+    },
+    {
+      "speaker": "Alex",
+      "text": "Perfect. I think that covers everything. Thanks for a thorough retro, Jordan."
+    },
+    {
+      "speaker": "Jordan",
+      "text": "Thanks, Alex. Talk soon."
+    }
+  ]
+}
