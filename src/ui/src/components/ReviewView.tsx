@@ -26,9 +26,11 @@ export default function ReviewView({ sessionId }: Props) {
   const [nameValue, setNameValue] = useState('')
   const [savingName, setSavingName] = useState(false)
   const [stageElapsedSec, setStageElapsedSec] = useState(0)
+  const [pollFailing, setPollFailing] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
   const stageStartRef = useRef<number>(Date.now())
   const lastStageRef = useRef<string | null>(null)
+  const pollFailureCountRef = useRef(0)
 
   async function load() {
     setLoading(true)
@@ -45,15 +47,25 @@ export default function ReviewView({ sessionId }: Props) {
 
   useEffect(() => { void load() }, [sessionId])
 
-  // Poll while the session is still processing (audio pipeline runs in background)
+  // Poll while the session is still processing (audio pipeline runs in background).
+  // A poll can fail transiently (a dev-server reload, a blip in connectivity) and
+  // is worth retrying silently — but if it keeps failing, staring at an unchanging
+  // spinner with no indication anything is wrong is indistinguishable from a real
+  // hang. Surface it after a few consecutive misses instead of retrying forever
+  // in silence.
   useEffect(() => {
     if (session?.status !== 'processing') return
+    pollFailureCountRef.current = 0
+    setPollFailing(false)
     const timer = setInterval(async () => {
       try {
         const data = await getSession(sessionId)
+        pollFailureCountRef.current = 0
+        setPollFailing(false)
         setSession(data)
       } catch {
-        // transient poll failure — keep trying
+        pollFailureCountRef.current += 1
+        if (pollFailureCountRef.current >= 3) setPollFailing(true)
       }
     }, 2000)
     return () => clearInterval(timer)
@@ -133,6 +145,13 @@ export default function ReviewView({ sessionId }: Props) {
           {session.processing_stage ?? 'Working…'}
           <span style={{ color: '#9ca3af' }}> — running {elapsedLabel}</span>
         </p>
+        {pollFailing && (
+          <p className="warning-msg" style={{ marginTop: 12 }}>
+            Lost contact with the server — still retrying every few seconds. If this
+            doesn't recover, the API process may have restarted or crashed; check
+            that it's running, then reload this page.
+          </p>
+        )}
         <p style={{ color: '#9ca3af', fontSize: 12, marginTop: 12 }}>
           This page updates automatically. You can leave and come back — processing
           continues on the server. Longer audio files and larger Whisper models

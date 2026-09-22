@@ -17,6 +17,7 @@ from transcribe3.api.dependencies import (
     resolve_provider,
 )
 from transcribe3.core.attributor import attribute_speakers
+from transcribe3.core.audio.duration import probe_audio_duration_seconds
 from transcribe3.core.cleaner import clean_transcript
 from transcribe3.api.llm_errors import describe_llm_failure
 from transcribe3.core.llm.client import LLMUnavailableError
@@ -284,6 +285,10 @@ def upload_audio(
     audio_dest = session_dir / original_filename
     with audio_dest.open("wb") as f:
         shutil.copyfileobj(file.file, f)
+
+    duration = probe_audio_duration_seconds(audio_dest)
+    if duration is not None:
+        session = session.model_copy(update={"audio_duration_seconds": duration})
 
     repo.save(session, sessions_dir)
 

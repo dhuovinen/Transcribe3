@@ -287,6 +287,20 @@ def test_attribute_speakers_raises_when_backend_unreachable_for_every_window():
         attribute_speakers(segs, config, mock_client, model="llama3")
 
 
+def test_attribute_speakers_stops_after_three_consecutive_unavailable_windows():
+    """A dead backend shouldn't be hammered for every remaining window once the
+    pattern is clear — bail out after 3 consecutive failures instead of N."""
+    segs = [make_segment(f"id-{i:02d}") for i in range(42)]  # 5 windows at step 8
+    mock_client = MagicMock()
+    mock_client.complete.side_effect = LLMUnavailableError("olmx is not running")
+
+    config = make_config()
+    with pytest.raises(LLMUnavailableError):
+        attribute_speakers(segs, config, mock_client, model="llama3")
+
+    assert mock_client.complete.call_count == 3
+
+
 def test_attribute_speakers_does_not_raise_on_partial_outage(mock_llm_client):
     """If only some windows fail (e.g. the backend restarts mid-run), keep going —
     only a *complete* outage should abort the run."""

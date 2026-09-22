@@ -146,6 +146,8 @@ class TranscriptSession(BaseModel):
     speaker_map: SpeakerMap = Field(default_factory=dict)
     segments: list[TranscriptSegment] = Field(default_factory=list)
     audio_file: str | None = None  # filename within session dir; set for audio-sourced sessions
+    # Probed once at upload time (ffprobe); None if audio-less or the probe failed.
+    audio_duration_seconds: float | None = None
     # Relative to AppSettings.archive_dir. The original audio may be removed from
     # the local session directory once this verified archive copy exists.
     archived_audio_path: str | None = None

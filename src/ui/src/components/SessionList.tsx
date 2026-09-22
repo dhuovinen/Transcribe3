@@ -18,6 +18,17 @@ function formatDate(iso: string): string {
   })
 }
 
+function formatDuration(seconds: number | null): string {
+  if (seconds == null) return '—'
+  const total = Math.round(seconds)
+  const h = Math.floor(total / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  const s = total % 60
+  const mm = h > 0 ? String(m).padStart(2, '0') : String(m)
+  const ss = String(s).padStart(2, '0')
+  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`
+}
+
 export default function SessionList({ onSelectSession, onNewSession }: Props) {
   const [sessions, setSessions] = useState<SessionSummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -120,6 +131,7 @@ export default function SessionList({ onSelectSession, onNewSession }: Props) {
           <th>Session ID</th>
           <th>Name</th>
           <th>Created</th>
+          <th>Duration</th>
           <th>Segments</th>
           <th>Low-confidence</th>
           <th>Mean Conf.</th>
@@ -194,6 +206,7 @@ export default function SessionList({ onSelectSession, onNewSession }: Props) {
               )}
             </td>
             <td>{formatDate(s.created_at)}</td>
+            <td>{formatDuration(s.audio_duration_seconds)}</td>
             <td>{s.segment_count}</td>
             <td>
               {s.low_confidence_count > 0 ? (

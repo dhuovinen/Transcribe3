@@ -46,6 +46,7 @@ export interface TranscriptSession {
   speaker_map: Record<string, string>;
   segments: TranscriptSegment[];
   audio_file: string | null;
+  audio_duration_seconds: number | null;
   status: SessionStatus;
   processing_stage: string | null;
   error: string | null;
@@ -80,6 +81,7 @@ export interface SessionSummary {
   processing_params: ProcessingParams | null;
   stage_timings: StageTiming[];
   audio_file: string | null;
+  audio_duration_seconds: number | null;
 }
 
 export interface StageTiming {

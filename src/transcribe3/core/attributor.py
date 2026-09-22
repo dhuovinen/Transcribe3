@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 _WINDOW_SIZE = 10
 _OVERLAP = 2
+# After this many consecutive windows fail because the backend is unreachable,
+# stop instead of burning through every remaining window with the same result.
+_MAX_CONSECUTIVE_UNAVAILABLE = 3
 
 
 def attribute_speakers(
@@ -49,6 +52,8 @@ def attribute_speakers(
     starts = list(range(0, total, step))
     total_windows = len(starts)
     unavailable_windows = 0
+    consecutive_unavailable = 0
+    stopped_early = False
 
     for window_num, i in enumerate(starts, start=1):
         window = segments[i : i + _WINDOW_SIZE]
@@ -70,6 +75,9 @@ def attribute_speakers(
         updated_window, unavailable = _attribute_window(window, config, llm_client, model)
         if unavailable:
             unavailable_windows += 1
+            consecutive_unavailable += 1
+        else:
+            consecutive_unavailable = 0
         window_elapsed = time.monotonic() - window_start
         logger.info(
             "LLM attribution window %d/%d (%d segments) took %.1fs",
@@ -87,15 +95,27 @@ def attribute_speakers(
         if on_progress:
             on_progress(window_num, total_windows)
 
-    # If the backend was unreachable for every single window, the whole run is a
+        if consecutive_unavailable >= _MAX_CONSECUTIVE_UNAVAILABLE:
+            stopped_early = True
+            logger.warning(
+                "LLM backend unreachable for %d consecutive windows (stopped after "
+                "window %d/%d) — aborting attribution instead of retrying a dead backend.",
+                consecutive_unavailable, window_num, total_windows,
+            )
+            break
+
+    # If the backend was unreachable for every single window it got, the run is a
     # wash — raise instead of silently handing back all-zero confidence with no
     # explanation (previously this only degraded per-window and never surfaced,
     # so callers' "LLM unavailable" handling — which sets a session warning —
     # never triggered and mean confidence just silently dropped to 0%).
-    if unavailable_windows == total_windows:
-        raise LLMUnavailableError(
-            f"LLM backend unreachable for all {total_windows} attribution window(s)"
+    if stopped_early or unavailable_windows == total_windows:
+        detail = (
+            f"unreachable for {consecutive_unavailable} consecutive attribution window(s)"
+            if stopped_early
+            else f"unreachable for all {total_windows} attribution window(s)"
         )
+        raise LLMUnavailableError(f"LLM backend {detail}")
 
     # Apply confidence scoring to all segments
     threshold = config.low_confidence_threshold

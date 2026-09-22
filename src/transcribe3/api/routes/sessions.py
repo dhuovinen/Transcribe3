@@ -79,6 +79,7 @@ def _session_to_summary(session: TranscriptSession) -> SessionSummary:
         processing_params=session.processing_params,
         stage_timings=session.stage_timings,
         audio_file=session.audio_file,
+        audio_duration_seconds=session.audio_duration_seconds,
     )
 
 

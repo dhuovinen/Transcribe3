@@ -51,6 +51,7 @@ class SessionSummary(BaseModel):
     processing_params: ProcessingParams | None = None
     stage_timings: list[StageTiming] = Field(default_factory=list)
     audio_file: str | None = None
+    audio_duration_seconds: float | None = None
 
 
 class ConfidenceSummary(BaseModel):
