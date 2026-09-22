@@ -39,8 +39,11 @@ def make_mock_complete():
 
 @pytest.fixture
 def sessions_client(tmp_path, monkeypatch):
-    """TestClient with TRANSCRIBE3_SESSIONS_DIR pointed at tmp_path."""
+    """TestClient with TRANSCRIBE3_SESSIONS_DIR and TRANSCRIBE3_CONFIG_DIR both
+    pointed at tmp_path — tests don't care that they're separate directories in
+    production, only that settings.json ends up somewhere the test can see."""
     monkeypatch.setenv("TRANSCRIBE3_SESSIONS_DIR", str(tmp_path))
+    monkeypatch.setenv("TRANSCRIBE3_CONFIG_DIR", str(tmp_path))
     # Re-import app so dependencies pick up the new env var
     from transcribe3.api import dependencies
 
@@ -48,6 +51,7 @@ def sessions_client(tmp_path, monkeypatch):
         return tmp_path
 
     app.dependency_overrides[dependencies.get_sessions_dir] = overridden_sessions_dir
+    app.dependency_overrides[dependencies.get_config_dir] = overridden_sessions_dir
     client = TestClient(app, raise_server_exceptions=True)
     yield client
     app.dependency_overrides.clear()
@@ -398,7 +402,9 @@ def _run_audio_worker(tmp_path: Path, **settings_overrides):
             "transcribe3.core.llm.client.OllamaClient.complete",
             side_effect=make_mock_complete(),
         ):
-            _process_audio_session(session, audio_path, "base", "whisperx", "hf_token", tmp_path)
+            _process_audio_session(
+                session, audio_path, "base", "whisperx", "hf_token", tmp_path, tmp_path,
+            )
 
     return SessionRepository.load(session.session_id, tmp_path)
 

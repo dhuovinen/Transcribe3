@@ -48,14 +48,23 @@ def _sessions_dir_default() -> Path:
     return Path(env) if env else Path("sessions")
 
 
+def _config_dir_default() -> Path:
+    env = os.environ.get("TRANSCRIBE3_CONFIG_DIR")
+    return Path(env) if env else Path("config")
+
+
 def _output_path(sessions_dir: Path, session_id: str, fmt: OutputFormat) -> Path:
     return sessions_dir / session_id / f"output.{fmt.value}"
 
 
 def _resolve_provider(sessions_dir: Path, provider_id: str) -> LLMProviderConfig:
     """Resolve --provider against llm_providers in settings.json, exiting with a clear
-    error (and the list of configured ids) if it doesn't match one."""
-    settings = SettingsRepository.load(sessions_dir)
+    error (and the list of configured ids) if it doesn't match one.
+
+    `sessions_dir` is only consulted as the legacy location settings.json used to
+    live in — see SettingsRepository.load — the file itself now lives under
+    _config_dir_default()."""
+    settings = SettingsRepository.load(_config_dir_default(), sessions_dir)
     provider = settings.find_provider(provider_id)
     if provider is None:
         known = [p.id for p in settings.llm_providers]

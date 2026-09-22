@@ -16,12 +16,23 @@ def get_sessions_dir() -> Path:
     return Path(os.getenv("TRANSCRIBE3_SESSIONS_DIR", "./sessions"))
 
 
+def get_config_dir() -> Path:
+    """Where the app-level settings.json lives — separate from sessions_dir,
+    which holds per-session data. Kept apart so it's clear which one to edit:
+    the gear-icon Settings screen changes this file; nothing in it is
+    session-specific."""
+    return Path(os.getenv("TRANSCRIBE3_CONFIG_DIR", "./config"))
+
+
 def get_session_repo() -> SessionRepository:
     return SessionRepository()
 
 
-def get_settings(sessions_dir: Path = Depends(get_sessions_dir)) -> AppSettings:
-    return SettingsRepository.load(sessions_dir)
+def get_settings(
+    config_dir: Path = Depends(get_config_dir),
+    sessions_dir: Path = Depends(get_sessions_dir),
+) -> AppSettings:
+    return SettingsRepository.load(config_dir, legacy_sessions_dir=sessions_dir)
 
 
 def resolve_provider(settings: AppSettings, provider_id: str | None) -> LLMProviderConfig:

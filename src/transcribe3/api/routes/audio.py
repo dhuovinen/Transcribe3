@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, JSONResponse
 
 from transcribe3.api.dependencies import (
     build_provider_client,
+    get_config_dir,
     get_session_repo,
     get_sessions_dir,
     resolve_provider,
@@ -94,6 +95,7 @@ def _process_audio_session(
     backend: str,
     hf_token: str,
     sessions_dir: Path,
+    config_dir: Path,
 ) -> None:
     """Background worker: transcribe, diarize, then run the Phase 1 cleaning
     and LLM attribution pass so audio sessions get the same quality layer as
@@ -146,7 +148,7 @@ def _process_audio_session(
         session = current_session
 
         # Chain the Phase 1 quality layer: cleaning + LLM speaker attribution
-        settings = SettingsRepository.load(sessions_dir)
+        settings = SettingsRepository.load(config_dir, sessions_dir)
         provider = resolve_provider(settings, None)
         config = CleaningConfig(
             llm_model=settings.default_model,
@@ -250,6 +252,7 @@ def upload_audio(
     whisper_model: str = Form("base"),
     backend: str = Form("whisperx"),
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
     repo: SessionRepository = Depends(get_session_repo),
 ) -> JSONResponse:
     original_filename = file.filename or "audio"
@@ -285,7 +288,8 @@ def upload_audio(
     repo.save(session, sessions_dir)
 
     background_tasks.add_task(
-        _process_audio_session, session, audio_dest, whisper_model, backend, hf_token, sessions_dir
+        _process_audio_session,
+        session, audio_dest, whisper_model, backend, hf_token, sessions_dir, config_dir,
     )
 
     # Returns immediately — the client polls GET /sessions/{id} for status

@@ -6,6 +6,7 @@ __pycache__/
 .env.local
 sessions/
 batch-sessions/
+config/
 *.egg-info/
 dist/
 build/
@@ -17,3 +18,4 @@ node_modules/
 .vite/
 *.local
 *.bak
+.claude/settings.local.json

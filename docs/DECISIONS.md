@@ -275,6 +275,41 @@ resolved token is injected into `build_llm_client` by the API and CLI layers so
 - Both the model-list and completion calls authenticate, so a provider that needs a
   token appears in the UI's model picker exactly like one that doesn't.
 
+## ADR-012: Application Settings Live Outside sessions/
+
+**Date:** 2026-09-22
+**Status:** Accepted
+
+### Context
+
+`settings.json` (the app-level defaults edited via the gear-icon Settings screen —
+LLM providers/model, transcription backend/Whisper model, thresholds) lived inside
+`sessions/`, the same directory that holds every `session_id/` subfolder. That made
+it look session-scoped when it is not: it is one file shared by the whole app, and
+each session already keeps its own frozen record of what was actually used to
+produce it (`session.processing_params`, see `shared/types.py`). The shared
+directory was a layout coincidence, not a functional coupling, but it was a real
+source of confusion about which file governs what.
+
+### Decision
+
+`settings.json` now lives in its own directory, `config/` by default, resolved
+independently of `sessions/` (`get_config_dir` in `api/dependencies.py`, mirrored by
+`_config_dir_default` in `cli.py`), overridable via `TRANSCRIBE3_CONFIG_DIR`.
+`SettingsRepository.load` migrates an existing `sessions/settings.json` to the new
+location automatically on first read (`_migrate_legacy_location`), so upgrading
+needs no manual step.
+
+### Consequences
+
+- The gear-icon Settings screen and `config/settings.json` are now unambiguously
+  the same thing; `sessions/` holds only per-session data.
+- Existing installs migrate in place the first time the server (or CLI) loads
+  settings after upgrading; the old file is moved, not copied, so there is exactly
+  one file to edit afterward.
+- Anything that read `sessions/settings.json` directly (scripts, backups) needs to
+  point at `config/settings.json` instead.
+
 ---
 
 ---

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { getSettings, listModels, uploadAudio, uploadTranscript } from '../api'
+import { AUDIO_BACKENDS, WHISPER_MODELS } from '../audioOptions'
 import type { CleaningConfigRequest, FillerWordBehavior, LLMProviderConfig } from '../types'
 
 interface Props {
@@ -8,12 +9,6 @@ interface Props {
 }
 
 type InputMode = 'transcript' | 'audio'
-
-const WHISPER_MODELS = ['tiny', 'base', 'small', 'medium', 'large-v2', 'large-v3']
-const AUDIO_BACKENDS = [
-  { value: 'whisperx', label: 'WhisperX (CPU)' },
-  { value: 'mlx', label: 'mlx-whisper (Apple GPU)' },
-]
 
 export default function UploadForm({ onSuccess, onCancel }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
@@ -42,6 +37,8 @@ export default function UploadForm({ onSuccess, onCancel }: Props) {
         setProviders(s.llm_providers.filter((p) => p.enabled))
         setProviderId(s.default_provider_id)
         defaultModel = s.default_model
+        setWhisperModel(s.default_whisper_model)
+        setBackend(s.default_transcription_backend)
         setDisabledStages([
           ...(s.run_cleaning ? [] : ['text cleaning']),
           ...(s.run_attribution ? [] : ['LLM speaker attribution']),

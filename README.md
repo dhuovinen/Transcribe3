@@ -98,7 +98,7 @@ Run `uv run transcribe3 --help` for all commands and options.
 
 ## Configuration
 
-Settings (LLM timeout, default model, confidence threshold, Ollama URL) are managed via the **⚙ Settings** page in the UI, or directly in `sessions/settings.json`. Defaults:
+Settings (LLM timeout, default model, default transcription backend/Whisper model, confidence threshold, Ollama URL) are managed via the **⚙ Settings** page in the UI, or directly in `config/settings.json` — a single app-level file, separate from `sessions/` (overridable via `TRANSCRIBE3_CONFIG_DIR`). Defaults:
 
 | Setting | Default |
 |---|---|

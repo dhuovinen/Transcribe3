@@ -92,6 +92,8 @@ export interface AppSettings {
   llm_providers: LLMProviderConfig[];
   default_provider_id: string;
   default_model: string;
+  default_transcription_backend: string;
+  default_whisper_model: string;
   low_confidence_threshold: number;
   /** Optional pipeline stages, both switchable in Settings. */
   run_cleaning: boolean;

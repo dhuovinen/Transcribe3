@@ -26,8 +26,14 @@
   - The UI (`src/ui/src/api.ts`) auto-detects the API host from `window.location.hostname`, so `src/ui/.env.local`'s `VITE_API_URL` should normally stay unset/commented. Only set it to point the UI at an API host that differs from the page's own host.
   - If the machine's LAN IP changes (DHCP), update it in `.env`'s `TRANSCRIBE3_CORS_ORIGINS`.
   - This API is unauthenticated; trusted LAN only.
+- Application-level defaults (LLM providers/model, transcription backend/Whisper model,
+  thresholds) live in `config/settings.json` — edited via the gear-icon Settings screen,
+  overridable via `TRANSCRIBE3_CONFIG_DIR`. This is intentionally separate from
+  `sessions/`, which holds per-session data; each session also keeps its own frozen
+  snapshot of the settings used to produce it (`session.processing_params`), so changing
+  a default later doesn't rewrite history.
 - LLM providers that require a bearer token read it from the environment, never from
-  `sessions/settings.json` (that file is served verbatim by the unauthenticated
+  `config/settings.json` (that file is served verbatim by the unauthenticated
   `/settings` endpoint). Variable name: `TRANSCRIBE3_LLM_API_KEY_<PROVIDER_ID>` — the
   provider id from Settings, uppercased, non-alphanumerics replaced by `_`. Set it in
   `.env` and restart the API server. A provider entry can name a different variable via

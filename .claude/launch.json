@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "uvicorn", "transcribe3.api.main:app", "--reload", "--host", "127.0.0.1", "--port", "8010"],
+      "port": 8010
+    },
+    {
+      "name": "ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "src/ui", "run", "dev", "--", "--host", "127.0.0.1", "--port", "3015", "--strictPort"],
+      "port": 3015
+    }
+  ]
+}

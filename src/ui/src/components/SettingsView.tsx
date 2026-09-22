@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getSettings, listModelsDetailed, updateSettings } from '../api'
+import { AUDIO_BACKENDS, WHISPER_MODELS } from '../audioOptions'
 import type { AppSettings, LLMProtocol, LLMProviderConfig } from '../types'
 
 interface Props {
@@ -321,6 +322,43 @@ export default function SettingsView({ onBack }: Props) {
             </span>
           )}
         </p>
+      </section>
+
+      {/* ── Audio upload defaults ── */}
+      <section className="panel settings-section">
+        <h3>Default audio processing</h3>
+        <p className="settings-hint">
+          Preselected on the New Session screen for audio uploads. An individual
+          upload can still override both.
+        </p>
+
+        <div className="settings-fields">
+          <div className="settings-field">
+            <span className="settings-label">Transcription backend</span>
+            <select
+              value={settings.default_transcription_backend}
+              onChange={(e) =>
+                setSettings({ ...settings, default_transcription_backend: e.target.value })
+              }
+            >
+              {AUDIO_BACKENDS.map((b) => (
+                <option key={b.value} value={b.value}>{b.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="settings-field">
+            <span className="settings-label">Whisper model</span>
+            <select
+              value={settings.default_whisper_model}
+              onChange={(e) => setSettings({ ...settings, default_whisper_model: e.target.value })}
+            >
+              {WHISPER_MODELS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </section>
 
       {/* ── Provider registry ── */}

@@ -6,7 +6,7 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from transcribe3.api.dependencies import get_sessions_dir
+from transcribe3.api.dependencies import get_config_dir, get_sessions_dir
 from transcribe3.data.secrets import resolve_provider_api_key
 from transcribe3.data.settings import SettingsRepository
 from transcribe3.shared.types import AppSettings
@@ -30,18 +30,22 @@ def _payload(settings: AppSettings) -> dict[str, Any]:
 
 
 @router.get("")
-def get_settings(sessions_dir: Path = Depends(get_sessions_dir)) -> JSONResponse:
-    return JSONResponse(content=_payload(SettingsRepository.load(sessions_dir)))
+def get_settings(
+    config_dir: Path = Depends(get_config_dir),
+    sessions_dir: Path = Depends(get_sessions_dir),
+) -> JSONResponse:
+    return JSONResponse(content=_payload(SettingsRepository.load(config_dir, sessions_dir)))
 
 
 @router.put("")
 def update_settings(
     settings: AppSettings,
+    config_dir: Path = Depends(get_config_dir),
     sessions_dir: Path = Depends(get_sessions_dir),
 ) -> JSONResponse:
     # Archive destinations are only changed through /archive/configuration,
     # which validates the path and creates the selected folder first.
-    existing = SettingsRepository.load(sessions_dir)
+    existing = SettingsRepository.load(config_dir, sessions_dir)
     updated = settings.model_copy(update={"archive_dir": existing.archive_dir})
-    SettingsRepository.save(updated, sessions_dir)
+    SettingsRepository.save(updated, config_dir)
     return JSONResponse(content=_payload(updated))

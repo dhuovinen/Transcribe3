@@ -228,6 +228,10 @@ class AppSettings(BaseModel):
     llm_providers: list[LLMProviderConfig] = Field(default_factory=_default_llm_providers)
     default_provider_id: str = "ollama"
     default_model: str = "qwen3.6:27b"
+    # Preselected on the New Session screen for audio uploads; a session can
+    # still override both per-run.
+    default_transcription_backend: str = "whisperx"
+    default_whisper_model: str = "base"
     low_confidence_threshold: ConfidenceScore = 0.6
     # Optional pipeline stages. LLM attribution makes one sequential call per
     # 10-segment window, so on a long recording it dominates total runtime —

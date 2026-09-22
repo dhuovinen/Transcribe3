@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from transcribe3.api.dependencies import get_session_repo, get_sessions_dir
+from transcribe3.api.dependencies import get_config_dir, get_session_repo, get_sessions_dir
 from transcribe3.api.schemas import (
     ArchiveConfigurationUpdate,
     ArchiveRecordingRequest,
@@ -100,9 +100,10 @@ def _require_not_processing(session: TranscriptSession) -> None:
 @router.get("")
 def get_archive_status(
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
     repo: SessionRepository = Depends(get_session_repo),
 ) -> ArchiveStatusResponse:
-    settings = SettingsRepository.load(sessions_dir)
+    settings = SettingsRepository.load(config_dir, sessions_dir)
     archive_path = Path(settings.archive_dir).expanduser().resolve() if settings.archive_dir else None
     recordings = [
         status
@@ -122,15 +123,16 @@ def get_archive_status(
 def configure_archive(
     body: ArchiveConfigurationUpdate,
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
 ) -> ArchiveStatusResponse:
     try:
         archive_root = ArchiveRepository.configure_root(body.archive_dir, sessions_dir)
     except ArchiveError as error:
         _raise_archive_error(error)
 
-    settings = SettingsRepository.load(sessions_dir)
-    SettingsRepository.save(settings.model_copy(update={"archive_dir": str(archive_root)}), sessions_dir)
-    return get_archive_status(sessions_dir=sessions_dir, repo=SessionRepository())
+    settings = SettingsRepository.load(config_dir, sessions_dir)
+    SettingsRepository.save(settings.model_copy(update={"archive_dir": str(archive_root)}), config_dir)
+    return get_archive_status(sessions_dir=sessions_dir, config_dir=config_dir, repo=SessionRepository())
 
 
 @router.post("/{session_id}/archive")
@@ -138,11 +140,12 @@ def archive_recording(
     session_id: str,
     body: ArchiveRecordingRequest,
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
     repo: SessionRepository = Depends(get_session_repo),
 ) -> ArchiveRecordingStatus:
     session = _load_session(session_id, sessions_dir, repo)
     _require_not_processing(session)
-    settings = SettingsRepository.load(sessions_dir)
+    settings = SettingsRepository.load(config_dir, sessions_dir)
     try:
         updated = ArchiveRepository.archive(session, sessions_dir, settings.archive_dir, body.remove_local)
         status = _recording_status(updated, sessions_dir, settings.archive_dir)
@@ -157,11 +160,12 @@ def archive_recording(
 def restore_recording(
     session_id: str,
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
     repo: SessionRepository = Depends(get_session_repo),
 ) -> ArchiveRecordingStatus:
     session = _load_session(session_id, sessions_dir, repo)
     _require_not_processing(session)
-    settings = SettingsRepository.load(sessions_dir)
+    settings = SettingsRepository.load(config_dir, sessions_dir)
     try:
         restored = ArchiveRepository.restore(session, sessions_dir, settings.archive_dir)
         status = _recording_status(restored, sessions_dir, settings.archive_dir)
@@ -176,11 +180,12 @@ def restore_recording(
 def delete_local_recording(
     session_id: str,
     sessions_dir: Path = Depends(get_sessions_dir),
+    config_dir: Path = Depends(get_config_dir),
     repo: SessionRepository = Depends(get_session_repo),
 ) -> ArchiveRecordingStatus:
     session = _load_session(session_id, sessions_dir, repo)
     _require_not_processing(session)
-    settings = SettingsRepository.load(sessions_dir)
+    settings = SettingsRepository.load(config_dir, sessions_dir)
     try:
         updated = ArchiveRepository.delete_local_copy(session, sessions_dir, settings.archive_dir)
         status = _recording_status(updated, sessions_dir, settings.archive_dir)
