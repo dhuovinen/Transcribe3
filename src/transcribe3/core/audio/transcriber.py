@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # mlx-community's Whisper model repos follow this naming pattern.
 # Override with MLX_WHISPER_REPO if your local size/name differs.
@@ -47,8 +50,11 @@ def _transcribe_whisperx(audio_path: Path, model_size: str) -> list[dict]:
         result = whisperx.align(
             result["segments"], align_model, metadata, audio, device=device
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "Word-level alignment failed for %s — falling back to segment-level "
+            "timestamps: %s", audio_path, exc,
+        )
 
     return result.get("segments", [])
 

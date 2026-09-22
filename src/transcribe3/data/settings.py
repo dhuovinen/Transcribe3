@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 
 from transcribe3.shared.constants import OLLAMA_BASE_URL, OLMX_BASE_URL
 from transcribe3.shared.types import AppSettings
+
+logger = logging.getLogger(__name__)
 
 
 class SettingsRepository:
@@ -19,7 +22,11 @@ class SettingsRepository:
             raw = json.loads(path.read_text())
             raw = SettingsRepository._migrate(raw)
             return AppSettings.model_validate(raw)
-        except Exception:
+        except Exception as exc:
+            logger.warning(
+                "Ignoring unreadable settings file %s, falling back to defaults: %s",
+                path, exc,
+            )
             return AppSettings()
 
     @staticmethod

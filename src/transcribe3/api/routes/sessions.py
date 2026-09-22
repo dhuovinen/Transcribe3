@@ -59,12 +59,13 @@ def _build_cleaning_config(
 
 def _session_to_summary(session: TranscriptSession) -> SessionSummary:
     total = len(session.segments)
-    low_conf = sum(
-        1 for s in session.segments if SegmentFlag.LOW_CONFIDENCE in s.flags
-    )
-    mean_conf = (
-        sum(s.confidence for s in session.segments) / total if total > 0 else 0.0
-    )
+    low_conf = 0
+    confidence_sum = 0.0
+    for s in session.segments:
+        if SegmentFlag.LOW_CONFIDENCE in s.flags:
+            low_conf += 1
+        confidence_sum += s.confidence
+    mean_conf = confidence_sum / total if total > 0 else 0.0
     return SessionSummary(
         session_id=session.session_id,
         source_file=session.source_file,

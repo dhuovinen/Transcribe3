@@ -101,6 +101,21 @@ def normalize_text(text: str) -> str:
 # remove_filler_words
 # ---------------------------------------------------------------------------
 
+# Built once at import time rather than per segment — clean_transcript calls
+# remove_filler_words once per segment, and a long recording can run this
+# hundreds of times per session.
+# Sort longest first so multi-word fillers match before their sub-words.
+# Negative lookahead: do NOT strip a filler that is immediately followed by
+# end-of-sentence punctuation (.!?) — in that position it carries meaning
+# (e.g. "I think so." — "so" is not a filler here).
+_sorted_fillers = sorted(FILLER_WORDS, key=len, reverse=True)
+_FILLER_WORD_PATTERN = re.compile(
+    r"(?<!['\w])("
+    + "|".join(re.escape(f) for f in _sorted_fillers)
+    + r")(?!['\w])(?!\s*[.!?])",
+    re.IGNORECASE,
+)
+
 
 def remove_filler_words(
     segment: TranscriptSegment,
@@ -110,19 +125,7 @@ def remove_filler_words(
     if behavior == FillerWordBehavior.OFF:
         return segment
 
-    # Build a regex that matches any filler word as a whole word/phrase.
-    # Sort longest first so multi-word fillers match before their sub-words.
-    # Negative lookahead: do NOT strip a filler that is immediately followed by
-    # end-of-sentence punctuation (.!?) — in that position it carries meaning
-    # (e.g. "I think so." — "so" is not a filler here).
-    sorted_fillers = sorted(FILLER_WORDS, key=len, reverse=True)
-    pattern = re.compile(
-        r"(?<!['\w])("
-        + "|".join(re.escape(f) for f in sorted_fillers)
-        + r")(?!['\w])(?!\s*[.!?])",
-        re.IGNORECASE,
-    )
-
+    pattern = _FILLER_WORD_PATTERN
     has_filler = bool(pattern.search(segment.text))
 
     if not has_filler:
