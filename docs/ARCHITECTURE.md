@@ -170,6 +170,66 @@ Recordings can optionally be moved to external archive storage after review
 (see `data/archive` below) — this happens outside the pipeline above and does
 not change any segment data.
 
+### Pipeline Diagram
+
+```mermaid
+flowchart TD
+    subgraph phaseA["Phase A — Ingestion"]
+        upload_t["Transcript upload<br/>.txt / .srt / .vtt / .json"]
+        parsers["data/parsers.py"]
+        upload_t --> parsers
+    end
+
+    subgraph phaseB["Phase B — Transcription + diarization (audio only)"]
+        direction TB
+        upload_a["Audio upload<br/>.wav / .mp3 / .m4a / .flac / .ogg / .mp4"]
+        transcriber["core/audio/transcriber.py<br/>WhisperX (CPU) or mlx-whisper (Apple GPU)"]
+        diarizer["core/audio/diarizer.py<br/>pyannote.audio speaker-diarization-3.1"]
+        align["core/audio/pipeline.py<br/>_best_speaker: max time-overlap match"]
+        upload_a --> transcriber
+        upload_a --> diarizer
+        transcriber --> align
+        diarizer --> align
+    end
+
+    segments(("list[TranscriptSegment]"))
+    parsers --> segments
+    align --> segments
+
+    subgraph phaseC["Phase C — Cleaning · optional (run_cleaning)"]
+        cleaner["core/cleaner.py<br/>rule-based regex — filler words,<br/>false starts, crosstalk, ~0s"]
+    end
+    segments -->|"on"| cleaner
+    segments -.->|"off: pass through unchanged"| attributor
+
+    subgraph phaseD["Phase D — Speaker attribution · optional (run_attribution)"]
+        attributor["core/attributor.py<br/>1 LLM call per 10-segment window<br/>(85-93% of total run time)"]
+        llm["core/llm/client.py<br/>Ollama or OpenAI-compatible endpoint"]
+        attributor --> llm
+    end
+    cleaner -->|"on"| attributor
+    cleaner -.->|"off: labels unvalidated,<br/>confidence unscored"| review
+
+    subgraph phaseE["Phase E — Review"]
+        review["React UI — ReviewView.tsx, SegmentRow.tsx<br/>rename speakers, edit text, click-to-seek"]
+        player["audio player<br/>GET /sessions/{id}/audio"]
+        review -.-> player
+    end
+    attributor --> review
+
+    subgraph phaseF["Phase F — Export / audio retrieval"]
+        exporters["data/exporters.py<br/>JSON / TXT / SRT / VTT"]
+        download["GET /sessions/{id}/audio<br/>download original recording"]
+    end
+    review --> exporters
+    review --> download
+```
+
+Solid arrows are the data flow; dashed arrows are the skip path taken when an
+optional stage (`run_cleaning` / `run_attribution`) is switched off in
+Settings. `data/session.py` (`SessionRepository`) persists `session.json`
+after every stage transition, independent of what's shown above.
+
 ---
 
 ## LLM Backend as Injected Dependency
