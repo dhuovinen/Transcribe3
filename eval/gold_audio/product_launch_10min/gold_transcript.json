@@ -1,0 +1,394 @@
+{
+  "case": "product_launch_10min",
+  "source": "synthetic-tts",
+  "notes": "Generated via macOS `say` from a fixed three-speaker script (US/GB/AU voices for separable diarization ground truth), mixed with a low-level brown-noise bed (relative volume 0.05) to simulate a semi-noisy room. Script text is exact ground truth by construction \u2014 the noise layer is mixed in after speech synthesis and never alters it.",
+  "audio_file": "audio.wav",
+  "duration_sec": 564.066313,
+  "speaker_count": 3,
+  "segments": [
+    {
+      "speaker": "Priya",
+      "text": "Okay, let's get started. This is our go, no-go review for the Meridian launch. Marcus, Elena, thanks for making time."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Happy to be here. I've got the engineering status ready whenever you want it."
+    },
+    {
+      "speaker": "Elena",
+      "text": "Same on the marketing side. I'll follow after Marcus."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Perfect. Marcus, why don't you start with where the build stands."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Sure. As of this morning, the release candidate is code complete and it's been in staging for four days."
+    },
+    {
+      "speaker": "Priya",
+      "text": "And how's it holding up?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Mostly well. We found two P2 bugs during regression, both already fixed and verified."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Any P1s or P0s?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "One P1, still open. It's an intermittent crash on the checkout confirmation screen, only on older Android devices."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Do we understand the cause yet?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "We think so. It looks like a race condition when the payment confirmation comes back before the animation finishes."
+    },
+    {
+      "speaker": "Elena",
+      "text": "How intermittent are we talking? Once in a hundred sessions, once in a thousand?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Closer to one in three hundred, based on the crash reporting from the beta cohort."
+    },
+    {
+      "speaker": "Priya",
+      "text": "That's not nothing. What's the fix estimate?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Our best guess is a day of work plus half a day of testing, so realistically ready by tomorrow evening."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Okay. Let's treat that as a blocker for now and revisit at the end of this meeting."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Agreed, that's fair."
+    },
+    {
+      "speaker": "Priya",
+      "text": "What about performance? Last time we talked, cold start was still a concern."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Good news there. We shaved off about four hundred milliseconds by lazy loading the onboarding illustrations."
+    },
+    {
+      "speaker": "Priya",
+      "text": "What's cold start sitting at now?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Around one point eight seconds on our reference device, down from two point three."
+    },
+    {
+      "speaker": "Elena",
+      "text": "That's a nice win. Does that apply evenly across low end devices too, or mostly flagship phones?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Mostly flagship so far. We haven't finished profiling on the budget Android tier yet."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Can we get that data before the launch decision?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "I can have preliminary numbers by tomorrow morning, full numbers by end of day tomorrow."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Let's aim for the preliminary numbers, that should be enough to make the call."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Sounds good, I'll prioritize that first thing."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Anything else on engineering before we move to marketing?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Just one thing. The analytics team asked for two new events to be added before launch, and those are already merged."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Great, thanks Marcus. Elena, over to you."
+    },
+    {
+      "speaker": "Elena",
+      "text": "Thanks. On the marketing side, the campaign assets are finished and approved by legal as of yesterday."
+    },
+    {
+      "speaker": "Priya",
+      "text": "That's ahead of schedule, nice."
+    },
+    {
+      "speaker": "Elena",
+      "text": "We got lucky, legal turned it around in two days instead of the usual week."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Did the messaging change at all during legal review?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "Only minor wording. We had to soften one claim about battery savings to say, quote, up to thirty percent, unquote."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Makes sense, that's safer language anyway. What's the plan for launch day itself?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "We're doing a staggered rollout. Email to the waitlist at nine AM, social posts at ten, and a press embargo lifts at noon."
+    },
+    {
+      "speaker": "Priya",
+      "text": "How big is the waitlist at this point?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "Just under forty thousand people, which is about twenty percent higher than we projected in August."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "That's a good problem to have. Are we confident the backend can handle a spike from that many people at once?"
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good question. Marcus, do we have load testing numbers for that scenario?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "We load tested up to sixty thousand concurrent sign ups last week and it held, but I'd want to rerun it since the checkout fix hasn't landed."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Let's rerun load testing tomorrow once the checkout fix is in."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Will do."
+    },
+    {
+      "speaker": "Elena",
+      "text": "One more thing on my side. We have three press outlets confirmed for early access briefings this week."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Which outlets?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "TechDaily, the Morning Ledger, and a smaller newsletter called Signal Weekly that's popular with our target audience."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good spread. Any concerns from them so far?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "TechDaily asked about pricing changes for existing customers, so we should make sure support has clean talking points."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Let's make sure that's in the support brief. Speaking of which, where do we stand on support readiness?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "I don't own that directly, but I know the support team finished their training session yesterday."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "I can speak to the technical side. We gave them a runbook for the top ten expected issues, including the checkout bug once it's fixed."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good. Let's make sure that runbook gets updated the moment the fix ships, not after."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Understood, I'll own that update myself so it doesn't slip."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Thank you. Let's talk about the launch date itself. Original target was this Thursday."
+    },
+    {
+      "speaker": "Elena",
+      "text": "From a marketing standpoint, Thursday still works. All the assets are locked and the press embargo is already scheduled."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "From engineering, I'd feel more comfortable with Friday, just to give the checkout fix a full day of soak time after it ships."
+    },
+    {
+      "speaker": "Priya",
+      "text": "That's a reasonable ask. Elena, how disruptive would a one day slip be for marketing?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "Not too bad. We'd need to reschedule the press embargo and resend one calendar invite, but nothing structural breaks."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Okay, let's tentatively move to Friday, pending the checkout fix landing cleanly tomorrow."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "That works for me."
+    },
+    {
+      "speaker": "Elena",
+      "text": "Agreed, I'll start adjusting the press calendar today so it's ready either way."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Let's talk risk register quickly before we wrap. Marcus, top risk from your side?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Still the checkout crash. Second would be the unknown performance on budget Android devices."
+    },
+    {
+      "speaker": "Priya",
+      "text": "And a mitigation for the Android question if the numbers come back bad?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Worst case, we feature flag the new onboarding illustrations off for lower end devices and keep the old flow there."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good, that's a reasonable fallback. Elena, top risk from marketing?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "Honestly, it's the waitlist size. If sign up traffic spikes harder than expected, a rocky first hour could hurt press sentiment."
+    },
+    {
+      "speaker": "Priya",
+      "text": "That lines up with wanting fresh load test numbers. Let's make sure those are done before Friday regardless of which day we launch."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Agreed, I'll treat that as non negotiable before go live."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good. Let's also touch on the rollback plan in case something goes wrong on launch day."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "We can roll back the client release within about fifteen minutes since it's a staged rollout, not a hard cutover."
+    },
+    {
+      "speaker": "Priya",
+      "text": "And on the backend?"
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Backend changes are backward compatible with the previous client version, so a rollback there is low risk."
+    },
+    {
+      "speaker": "Elena",
+      "text": "What would trigger a rollback decision, and who makes that call on launch day?"
+    },
+    {
+      "speaker": "Priya",
+      "text": "Good question. Let's say crash rate above two percent or checkout failure rate above five percent triggers an automatic page to me and Marcus."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "That threshold matches what we used for the last major release, so it's a reasonable bar."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Agreed. Let's put that in writing in the launch runbook today so there's no ambiguity on the day."
+    },
+    {
+      "speaker": "Elena",
+      "text": "I can help draft that section if it's useful, I've written similar runbooks before."
+    },
+    {
+      "speaker": "Priya",
+      "text": "That would be great, thank you."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "One last engineering item. We should decide who's on call across the launch window, especially if we move to Friday."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Let's plan for you and one other engineer during business hours, plus normal on call coverage overnight."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "I'll pull in Renata for the daytime shift, she's been closest to the checkout code this sprint."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Perfect, please loop her in today so she has context ahead of time."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Will do, I'll message her right after this call."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Elena, anything else from marketing before we close out?"
+    },
+    {
+      "speaker": "Elena",
+      "text": "Just a reminder that the influencer partnerships go live the same day as press, so timing really does matter here."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Understood, that's a strong argument for locking the date firmly by tomorrow afternoon."
+    },
+    {
+      "speaker": "Elena",
+      "text": "Agreed, tomorrow afternoon works well for us."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Alright, let's summarize. Checkout fix ships and is verified tomorrow. Fresh load test and budget device numbers come in tomorrow too."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "And the support runbook gets updated the moment the fix ships, not after."
+    },
+    {
+      "speaker": "Elena",
+      "text": "And I'll have the press calendar ready to shift to Friday, plus a draft of the rollback section for the runbook."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Great. Let's reconvene tomorrow at the same time to make the final go, no-go call."
+    },
+    {
+      "speaker": "Marcus",
+      "text": "Works for me."
+    },
+    {
+      "speaker": "Elena",
+      "text": "Same here, talk tomorrow."
+    },
+    {
+      "speaker": "Priya",
+      "text": "Thanks both, this was a productive session."
+    }
+  ]
+}

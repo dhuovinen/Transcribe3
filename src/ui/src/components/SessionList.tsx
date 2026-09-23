@@ -1,32 +1,11 @@
 import { useEffect, useState } from 'react'
 import { audioUrl, deleteSession, listSessions, renameSession } from '../api'
+import { formatDate, formatDuration } from '../format'
 import type { SessionSummary } from '../types'
 
 interface Props {
   onSelectSession: (sessionId: string) => void
   onNewSession: () => void
-}
-
-function formatDate(iso: string): string {
-  const d = new Date(iso)
-  return d.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-function formatDuration(seconds: number | null): string {
-  if (seconds == null) return '—'
-  const total = Math.round(seconds)
-  const h = Math.floor(total / 3600)
-  const m = Math.floor((total % 3600) / 60)
-  const s = total % 60
-  const mm = h > 0 ? String(m).padStart(2, '0') : String(m)
-  const ss = String(s).padStart(2, '0')
-  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`
 }
 
 export default function SessionList({ onSelectSession, onNewSession }: Props) {

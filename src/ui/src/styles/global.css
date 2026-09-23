@@ -408,6 +408,98 @@ td {
   letter-spacing: 0.04em;
 }
 
+/* ── Home / hero ── */
+.hero-intro {
+  padding: 32px 0 8px;
+}
+
+.hero-intro h2 {
+  font-size: 2rem;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  max-width: 760px;
+}
+
+.hero-tagline {
+  color: #4b5563;
+  font-size: 15px;
+  margin: 0 0 20px;
+  max-width: 700px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.hero-actions .btn {
+  padding: 8px 18px;
+  font-size: 14px;
+}
+
+.hero-section-label {
+  margin: 8px 0 10px;
+  color: #6b7280;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hero-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.hero-feature {
+  padding: 16px;
+}
+
+.hero-feature-icon {
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+
+.hero-feature h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.hero-feature p {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.hero-recent {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.hero-recent a {
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.hero-recent a:hover {
+  text-decoration: underline;
+}
+
 /* ── Export bar ── */
 .export-bar {
   display: flex;

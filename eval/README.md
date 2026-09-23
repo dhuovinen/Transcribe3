@@ -20,6 +20,13 @@ Results are written to `eval/results/results_<model>.json`, keyed by case name
 then backend, with `elapsed_sec`, `num_segments`, `wer`, and the full
 `hypothesis_text` for manual inspection.
 
+## Current cases
+
+| Case | Length | Speakers | Notes |
+|---|---|---|---|
+| `retro_5min` | ~5 min | 2 | Clean synthetic audio, two US/GB voices. |
+| `product_launch_10min` | ~9.4 min | 3 | Synthetic, three US/GB/AU voices, mixed with a low-level brown-noise bed to simulate a semi-noisy room — the reference case for evaluating a configuration's speed/accuracy trade-off against the gold standard under realistic (not pristine) conditions. |
+
 ## Directory layout
 
 Each case is a subdirectory of `eval/gold_audio/`:

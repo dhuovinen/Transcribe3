@@ -514,8 +514,9 @@ export default function SettingsView({ onBack }: Props) {
             <span>
               <strong>Clean transcript text</strong>
               <span className="settings-hint settings-hint--tight">
-                Filler words, false starts and crosstalk handling. Rule-based and fast —
-                off keeps every word exactly as transcribed.
+                Filler words, false starts and crosstalk handling.{' '}
+                <strong>Rule-based and fast - no LLM.</strong> Off keeps every word
+                exactly as transcribed.
               </span>
             </span>
           </label>
