@@ -6,9 +6,10 @@ import shutil
 import time
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 
+from transcribe3.api import audio_queue
 from transcribe3.api.dependencies import (
     build_provider_client,
     get_config_dir,
@@ -103,7 +104,7 @@ def _process_audio_session(
     transcript uploads."""
     pipeline_start = time.monotonic()
     try:
-        from transcribe3.core.audio.pipeline import run_audio_pipeline
+        from transcribe3.api.audio_worker import run_audio_pipeline_isolated
 
         logger.info(
             "Session %s: starting audio processing (backend=%s, whisper_model=%s)",
@@ -143,9 +144,9 @@ def _process_audio_session(
             current_stage = stage
             stage_start = time.monotonic()
 
-        # run_audio_pipeline calls this before each of its two sub-steps, so
+        # The pipeline calls this before each of its two sub-steps, so
         # progress advances beyond one flat "processing audio" stage.
-        segments = run_audio_pipeline(audio_path, hf_token, whisper_model, backend, advance_stage)
+        segments = run_audio_pipeline_isolated(audio_path, hf_token, whisper_model, backend, advance_stage)
         session = current_session
 
         # Chain the Phase 1 quality layer: cleaning + LLM speaker attribution
@@ -248,7 +249,6 @@ def _process_audio_session(
 
 @router.post("/upload-audio")
 def upload_audio(
-    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     whisper_model: str = Form("base"),
     backend: str = Form("whisperx"),
@@ -292,10 +292,9 @@ def upload_audio(
 
     repo.save(session, sessions_dir)
 
-    background_tasks.add_task(
-        _process_audio_session,
+    audio_queue.submit(lambda: _process_audio_session(
         session, audio_dest, whisper_model, backend, hf_token, sessions_dir, config_dir,
-    )
+    ))
 
     # Returns immediately — the client polls GET /sessions/{id} for status
     return JSONResponse(content=session.model_dump(mode="json"))

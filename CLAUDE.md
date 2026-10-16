@@ -48,6 +48,16 @@
   3. Is `VITE_API_URL` in `src/ui/.env.local` stale/pointing at the wrong host? It should normally be unset.
   4. After editing `.env` or `.env.local`, restart the affected dev server — neither hot-reloads env files.
 
+## Audio job queue
+- Audio uploads run one at a time, in upload order (`src/transcribe3/api/audio_queue.py`);
+  later uploads sit at "Queued…" until the one ahead finishes.
+- The queue is in memory. On startup the API deletes any session still at "processing"
+  (session folder and uploaded audio), since nothing will ever finish it. Re-upload to retry.
+  Sessions that failed during a run (status "error") are kept.
+- If the API is hard-killed mid-job, the Whisper/pyannote child notices within ~1s and exits
+  (`audio_worker._exit_if_orphaned`), so it doesn't keep running with GBs resident.
+- Assumes a single API process (no `--workers N`).
+
 ## Optional pipeline stages
 - Both are switched in Settings and apply to transcript and audio runs alike:
   `run_cleaning` (rule-based text cleanup, ~1s) and `run_attribution` (one LLM call per
