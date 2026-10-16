@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 import os
+from contextlib import asynccontextmanager
+from typing import AsyncIterator
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -23,6 +25,8 @@ _app_logger.propagate = False
 from transcribe3.api.routes import sessions, speakers, export, models as models_router, settings as settings_router
 from transcribe3.api.routes import audio as audio_router
 from transcribe3.api.routes import archive as archive_router
+from transcribe3.api.audio_queue import delete_interrupted_sessions
+from transcribe3.api.dependencies import get_sessions_dir
 
 
 DEFAULT_CORS_ORIGINS = (
@@ -52,10 +56,20 @@ def get_cors_origins(value: str | None = None) -> list[str]:
     return origins
 
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    # Audio jobs only live in this process's memory, so any session a previous
+    # run left at "processing" will never finish. Assumes one API process: with
+    # several workers, a starting worker would delete another's live jobs.
+    delete_interrupted_sessions(get_sessions_dir())
+    yield
+
+
 app = FastAPI(
     title="Transcribe3 API",
     description="Transcript validation and enrichment pipeline",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(

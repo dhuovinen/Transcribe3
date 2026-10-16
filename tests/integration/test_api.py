@@ -397,7 +397,7 @@ def _run_audio_worker(tmp_path: Path, **settings_overrides):
         advance_stage("Identifying speakers…")
         return _fake_pipeline_segments()
 
-    with patch("transcribe3.core.audio.pipeline.run_audio_pipeline", side_effect=fake_pipeline):
+    with patch("transcribe3.api.audio_worker.run_audio_pipeline_isolated", side_effect=fake_pipeline):
         with patch(
             "transcribe3.core.llm.client.OllamaClient.complete",
             side_effect=make_mock_complete(),
